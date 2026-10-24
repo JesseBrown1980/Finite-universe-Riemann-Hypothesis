@@ -289,10 +289,10 @@ To prevent conflation between arithmetic/geometric scanning and microscopic phys
    - **Nature**: Arithmetic measurement; does not advance physical time or dynamical equations of motion.
 
 2. **D3Q27 Microscopic Physics Engine** ([`finite-reversible-ternary-physics`](https://github.com/JesseBrown1980/finite-reversible-ternary-system-generate-the-experimentally-measured-laws-of-physics-from)):
-   - **Scope**: Evolved 5,184,000 rooms ($139,968,000$ trits, 41.472 MB) across all 375 sector heads (commit `2ed468f`).
-   - **Operation**: Steps genuine D3Q27 lattice gas dynamics across 48 forward ticks and 16 forward + 16 reverse Loschmidt inversion ticks.
+   - **Scope**: Evolved 5,184,000 rooms ($139,968,000$ trits, 41.472 MB) across all 375 sector heads (commit `dd2e539`).
+   - **Operation**: Steps genuine D3Q27 lattice gas dynamics across 48 forward ticks and 16 forward + 16 reverse Loschmidt inversion ticks with exact integer conservation.
    - **Timing**: 263.2 seconds (~4.4 minutes) locally on `D:\ASOLARIA-HOST8-ROOMS-300G`.
-   - **Receipts**: [`host8_375_sector_physics_regression.csv`](https://github.com/JesseBrown1980/finite-reversible-ternary-system-generate-the-experimentally-measured-laws-of-physics-from/blob/main/host8_375_sector_physics_regression.csv).
+   - **Provenance v2 & Boundary Overlap**: Strict 4-way authentication in [`host8_375_sector_physics_provenance_v2.csv`](https://github.com/JesseBrown1980/finite-reversible-ternary-system-generate-the-experimentally-measured-laws-of-physics-from/blob/main/host8_375_sector_physics_provenance_v2.csv) (3 pinned matches, 372 recorded hashes), Mode A boundary overlap verification in [`host8_mode_a_boundary_results.csv`](https://github.com/JesseBrown1980/finite-reversible-ternary-system-generate-the-experimentally-measured-laws-of-physics-from/blob/main/host8_mode_a_boundary_results.csv), and technical report [`HOST8_STAGE_D_PROVENANCE_AND_BOUNDARIES.md`](https://github.com/JesseBrown1980/finite-reversible-ternary-system-generate-the-experimentally-measured-laws-of-physics-from/blob/main/HOST8_STAGE_D_PROVENANCE_AND_BOUNDARIES.md).
 
 3. **Spectral Hilbert-Pólya Operator** ([`Solved-The-Riemann-Hypothesis-The-Hilbert-P-lya-Spectral-Operator-Solved`](https://github.com/JesseBrown1980/Solved-The-Riemann-Hypothesis-The-Hilbert-P-lya-Spectral-Operator-Solved)):
    - **Scope**: 27-point spherical NTT prism and discrete Hamiltonian $H + H^\top \equiv I \pmod P$.
