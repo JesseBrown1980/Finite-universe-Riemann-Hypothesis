@@ -92,9 +92,13 @@ def host8_rows(directory, manifest_path):
         curve_rows = list(csv.DictReader(f))
     assert len(curve_rows) == len(records)
     out = []
+    raw_cache = {}
     for index,(sec,j,cell,code) in enumerate(records):
         assert (curve_rows[index]['sector'],int(curve_rows[index]['sample'])) == (sec,j)
-        raw = (directory / ('sector-'+sec+'.rooms')).read_bytes()
+        if sec not in raw_cache:
+            with (directory / ('sector-'+sec+'.rooms')).open('rb') as f:
+                raw_cache[sec] = f.read(884736)
+        raw = raw_cache[sec]
         word = struct.unpack_from('<Q', raw, cell*8)[0]
         vals=[]
         for _ in range(K):
