@@ -1,4 +1,4 @@
-provenance,mode,sectors,sector_bytes,physical_bytes_verified_by_stat,sampled_room_reads,unique_sampled_room_positions,sampled_bytes_read,full_volume_bytes_hashed,anchor_prefix_sha256_checked,grid,rooms,smooth,rh_pass,p_rank_2,p_rank_1,p_rank_0
-user_reported_windows_run_NOT_independently_replayed,distributed_room_sampling_and_file_size,375,800000000,300000000000,72000,71625,576000,0,1,canonical,36000,24077,24077,17681,3692,2704
-user_reported_windows_run_NOT_independently_replayed,distributed_room_sampling_and_file_size,375,800000000,300000000000,72000,71625,576000,0,1,deep,36000,24175,24175,17928,3593,2654
-user_reported_windows_run_NOT_independently_replayed,distributed_room_sampling_and_file_size,375,800000000,300000000000,72000,71625,576000,0,1,combined,72000,48252,48252,35609,7285,5358
+generated_utc,provenance,mode,sectors,sector_bytes,physical_bytes_verified_by_stat,sampled_room_reads,unique_sampled_room_positions,sampled_bytes_read,full_volume_bytes_hashed,anchor_prefix_sha256_checked,elapsed_seconds,grid,rooms,smooth,rh_pass,p_rank_2,p_rank_1,p_rank_0
+2026-10-24T15:23:48.736492+00:00,live_read_only_from_specified_files,distributed_room_sampling_and_file_size,375,800000000,300000000000,72000,71625,576000,0,1,810.044,canonical,36000,24077,24077,17681,3692,2704
+2026-10-24T15:23:48.736492+00:00,live_read_only_from_specified_files,distributed_room_sampling_and_file_size,375,800000000,300000000000,72000,71625,576000,0,1,810.044,deep,36000,24175,24175,17928,3593,2654
+2026-10-24T15:23:48.736492+00:00,live_read_only_from_specified_files,distributed_room_sampling_and_file_size,375,800000000,300000000000,72000,71625,576000,0,1,810.044,combined,72000,48252,48252,35609,7285,5358
