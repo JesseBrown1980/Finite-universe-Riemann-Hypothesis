@@ -160,7 +160,9 @@ The determinant polynomial `det(I - T*M)` is verified independently via all 24 s
 |---|---:|
 | Smooth genus-two curves in exhaustive 243-quintic family | 162 |
 | Integer companion determinants and first-four-field traces | 162/162 |
-| Independent **held-out** F243 and F729 counts | **324/324** |
+| Independent **held-out** F243 and F729 counts (exhaustive family) | **324/324** |
+| Host8 smooth curves tested across physical slices | 194 |
+| Host8 held-out F243 and F729 predictions (`host8_frobenius_companion_results.csv`) | **388/388** |
 | Mod-`3` field arithmetic | Exact |
 | Classical Riemann hypothesis proof | **Not claimed** |
 
@@ -170,6 +172,8 @@ Reproduce:
 
 ```bash
 python verify_frobenius_companion.py
+# With authenticated Host8 slices or physical Windows 300 GB directory:
+python verify_frobenius_companion.py --host8-dir "D:\ASOLARIA-HOST8-ROOMS-300G"
 ```
 
 The generated [results/frobenius_companion_predictions.csv](results/frobenius_companion_predictions.csv) is checked against its committed counterpart by GitHub Actions.

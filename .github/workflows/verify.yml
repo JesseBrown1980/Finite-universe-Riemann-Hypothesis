@@ -29,13 +29,13 @@ jobs:
       - name: Exact modular falsification controls and authenticated Host8 spectral diagonalization
         run: python verify_ternary_spectral_controls.py --host8-dir /tmp/asolaria-host8 --output-dir /tmp/asolaria-recomputed
       - name: Build exact 4x4 Frobenius companion matrices and independently count F243 / F729 points
-        run: python verify_frobenius_companion.py --output /tmp/asolaria-recomputed/frobenius_companion_predictions.csv
+        run: python verify_frobenius_companion.py --host8-dir /tmp/asolaria-host8 --output /tmp/asolaria-recomputed/frobenius_companion_predictions.csv --host8-output /tmp/asolaria-recomputed/host8_frobenius_companion_results.csv
       - name: Compare recorded tables semantically
         run: |
           python - <<'PY'
           import csv
           from pathlib import Path
-          for name in ('all_quintics.csv', 'host8_curve_results.csv', 'spectral_falsification_controls.csv', 'host8_spectral_common_inputs.csv', 'frobenius_companion_predictions.csv'):
+          for name in ('all_quintics.csv', 'host8_curve_results.csv', 'spectral_falsification_controls.csv', 'host8_spectral_common_inputs.csv', 'frobenius_companion_predictions.csv', 'host8_frobenius_companion_results.csv'):
               with Path('results',name).open(newline='') as f:
                   original=list(csv.DictReader(f))
               with Path('/tmp/asolaria-recomputed',name).open(newline='') as f:
