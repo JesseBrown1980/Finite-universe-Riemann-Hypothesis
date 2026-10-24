@@ -66,15 +66,15 @@ With the Windows physical directory, set `--host8-dir D:\\ASOLARIA-HOST8-ROOMS-3
 
 ## Synchronized Status Summary
 
-Both complementary tracks are now fully synchronized, reproducible, and verified on GitHub at commit [5cadfac](https://github.com/JesseBrown1980/Finite-universe-Riemann-Hypothesis/commit/5cadfac).
+Both complementary tracks are now fully synchronized, reproducible, and verified on GitHub at commit [1e8a725](https://github.com/JesseBrown1980/Finite-universe-Riemann-Hypothesis/commit/1e8a725).
 
 | Verification Layer | Tested Scope | Verified Outcome |
 |:---|:---|:---:|
 | **Published Host8 Slices** | 6 SHA-256 hashes across sectors 000, 187, 374 | **6 / 6 Exact Match** |
-| **Host8 Genus-2 Curves** | 288 room seeds ( \times 3$), 194 smooth curves | **194 / 194 Finite-Field RH Pass** |
+| **Host8 Genus-2 Curves** | 288 room seeds (96 &times; 3), 194 smooth curves | **194 / 194 Finite-Field RH Pass** |
 | **Exhaustive Quintic Family** | All 243 monic quintics over $\mathbb{F}_3$, 162 smooth curves | **162 / 162 Pass (32 Zeta Numerators)** |
-| **Exact Modular Spectrum** |  \times 27$ circulant Hamiltonian $ over $\mathbb{F}_{1\,000\,081}$ | **27 Eigenvalues, Modular Reflection $\lambda + \lambda' \equiv 1$** |
-| **Common-Input Spectral Check** | 288 Host8 room states evaluated under $ | **288 / 288 Center Invariant [0] \equiv 0$** |
+| **Exact Modular Spectrum** | $27 \times 27$ circulant Hamiltonian $H$ over $\mathbb{F}_{1\,000\,081}$ | **27 Eigenvalues, Modular Reflection $\lambda + \lambda' \equiv 1$** |
+| **Common-Input Spectral Check** | 288 Host8 room states evaluated under $T$ | **288 / 288 Center Invariant $X[0] \equiv 0$** |
 | **CI / Automation** | GitHub Actions Python 3.11 runner | **PASSED** |
 
 ### Key Methodological Anchors Maintained
@@ -82,7 +82,7 @@ Both complementary tracks are now fully synchronized, reproducible, and verified
 - **Slice Authentication vs. Full Volume**: The repository stores the deterministic seed manifest and measurement records, bound fail-closed to the six SHA-256 hashes of the committed slices from [finite-reversible-ternary-physics](https://github.com/JesseBrown1980/finite-reversible-ternary-physics) (5a7e9a2). The physical 300 GB Windows drive at D:\ASOLARIA-HOST8-ROOMS-300G confirmed local bit-exact agreement on those slices without requiring full 300 GB remote ingestion.
 - **Finite-Domain Theorem vs. Classical Open Problem**: The 194 passing Host8 curves and 162 exhaustive curves provide a complete, integer-exact computational realization of Weil's theorem in balanced ternary. This remains rigorously distinguished from the classical continuous Riemann Hypothesis for $\zeta(s)$ on $\mathbb{C}$.
 
-Both repositories and the unified review provide a solid, audited baseline for formulating the next step: exploring non-circular operator-to-zeta trace formulas and scaling ladders ( = 3^m$).
+Both repositories and the unified review provide a solid, audited baseline for formulating the next step: exploring non-circular operator-to-zeta trace formulas and scaling ladders ($K = 3^m$).
 
 ### Important interpretation
 
