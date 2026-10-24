@@ -38,12 +38,31 @@ jobs:
         run: |
           python -m unittest -v test_mod9_teich_character.py
           python verify_mod9_teich_character.py --host8-dir /tmp/asolaria-host8 --output-dir /tmp/asolaria-recomputed
+      - name: Test full-volume scanner fail-closed behavior and exact Frobenius lift
+        run: |
+          python -m unittest -v test_host8_375_scanner.py test_formal_frobenius_mod9.py
+          python verify_formal_frobenius_lift_mod9.py --output-dir /tmp/asolaria-recomputed
+      - name: Replay scanner on 3 pinned Host8 slices with full byte hashes
+        run: |
+          python scan_host8_375_sectors.py --host8-dir /tmp/asolaria-host8 --sector-ids 0,187,374 --sector-bytes 884736 --canonical-rooms 110592 --deep-rooms 110592 --hash-entire-volume --output-dir /tmp/asolaria-scanner-smoke
+          python - <<'PY'
+          import csv
+          with open('/tmp/asolaria-scanner-smoke/host8_375sectors_scan_summary.csv', newline='') as f:
+              rows=list(csv.DictReader(f))
+          combined=rows[2]
+          assert combined['grid']=='combined'
+          assert int(combined['rooms'])==576
+          assert int(combined['smooth'])==388
+          assert int(combined['full_volume_bytes_hashed'])==3*884736
+          assert int(combined['anchor_prefix_sha256_checked'])==1
+          print('PASS: authenticated 3-sector scanner and all 388 expected smooth samples')
+          PY
       - name: Compare recorded tables semantically
         run: |
           python - <<'PY'
           import csv
           from pathlib import Path
-          for name in ('all_quintics.csv', 'host8_curve_results.csv', 'spectral_falsification_controls.csv', 'host8_spectral_common_inputs.csv', 'frobenius_companion_predictions.csv', 'host8_frobenius_companion_results.csv', 'host8_geometric_hasse_witt_results.csv', 'teich_mod9_curve_controls.csv', 'host8_teich_mod9_controls.csv'):
+          for name in ('all_quintics.csv', 'host8_curve_results.csv', 'spectral_falsification_controls.csv', 'host8_spectral_common_inputs.csv', 'frobenius_companion_predictions.csv', 'host8_frobenius_companion_results.csv', 'host8_geometric_hasse_witt_results.csv', 'teich_mod9_curve_controls.csv', 'host8_teich_mod9_controls.csv', 'formal_frobenius_mod9_curve_checks.csv', 'host8_formal_frobenius_mod9_checks.csv'):
               with Path('results',name).open(newline='') as f:
                   original=list(csv.DictReader(f))
               with Path('/tmp/asolaria-recomputed',name).open(newline='') as f:
