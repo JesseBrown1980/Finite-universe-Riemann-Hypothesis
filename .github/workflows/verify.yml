@@ -18,8 +18,14 @@ jobs:
           python-version: '3.11'
       - name: Exhaustive characteristic-three arithmetic and brute-force checks
         run: python -m unittest -v test_finite_ternary_weil.py
-      - name: Recompute all 243 curves and 288 Host8-derived samples
-        run: python host8_ternary_weil.py --output-dir /tmp/asolaria-recomputed
+      - name: Download immutable Host8 room slices
+        run: |
+          mkdir -p /tmp/asolaria-host8
+          curl -fsSL --retry 3 "https://raw.githubusercontent.com/JesseBrown1980/finite-reversible-ternary-physics/5a7e9a23dcacdea6fac3c5fa9d5db3069e82e9e3/data/host8_samples/sector-000.rooms" -o "/tmp/asolaria-host8/sector-000.rooms"
+          curl -fsSL --retry 3 "https://raw.githubusercontent.com/JesseBrown1980/finite-reversible-ternary-physics/5a7e9a23dcacdea6fac3c5fa9d5db3069e82e9e3/data/host8_samples/sector-187.rooms" -o "/tmp/asolaria-host8/sector-187.rooms"
+          curl -fsSL --retry 3 "https://raw.githubusercontent.com/JesseBrown1980/finite-reversible-ternary-physics/5a7e9a23dcacdea6fac3c5fa9d5db3069e82e9e3/data/host8_samples/sector-374.rooms" -o "/tmp/asolaria-host8/sector-374.rooms"
+      - name: Authenticate Host8 hashes and recompute all curves
+        run: python host8_ternary_weil.py --host8-dir /tmp/asolaria-host8 --output-dir /tmp/asolaria-recomputed
       - name: Compare recorded tables semantically
         run: |
           python - <<'PY'
