@@ -127,3 +127,57 @@ python verify_ternary_spectral_controls.py --host8-dir /path/to/host8_samples
 The [GitHub Actions workflow](.github/workflows/verify.yml) fetches the three immutable 884,736-byte slices from the exact pinned physics commit, verifies all six block SHA-256 hashes, reruns both Phase 1 and Phase 2, and checks **all four** generated CSV datasets against the committed reference results.
 
 **Physical scope:** Only three documented sector prefixes, not all 300 GB, are part of this public end-to-end reproduction. The 300 GB Windows disk and any local full-drive verification are outside this hosted runner. The finite-field RH analogue is known from Weil's theorem; the classical Riemann hypothesis remains an open problem.
+
+
+## Phase 3: curve-specific Frobenius companion, exact holdout tests
+
+The new [verify_frobenius_companion.py](verify_frobenius_companion.py) takes *only* the first two point counts of each smooth genus-two curve over `F_3`:
+
+```
+A = #C(F3) - 4
+2B = #C(F9) - 10 + A^2
+P_C(T) = 1 + A*T + B*T^2 + 3*A*T^3 + 9*T^4
+```
+
+It constructs a 4-by-4 **integer companion matrix** for the monic polynomial `x^4 + A*x^3 + B*x^2 + 3*A*x + 9`:
+
+```
+M = [[0,0,0,-9],
+     [1,0,0,-3*A],
+     [0,1,0,-B],
+     [0,0,1,-A]]
+```
+
+The determinant polynomial `det(I - T*M)` is verified independently via all 24 signed matrix permutations and matches `P_C(T)` exactly. Its power traces predict
+
+```
+#C(F_(3^n)) = 3^n + 1 - Tr(M^n).
+```
+
+**Held-out tests:** The first four point counts are verified against the earlier datasets. The subsequent predictions at `F_243` and `F_729` are checked independently by direct exact-characteristic-three point enumeration, using irreducible degree-five and degree-six field moduli (respectively `x^5+2x+1` and `x^6+x+2`).
+
+| Measurement | Verified |
+|---|---:|
+| Smooth genus-two curves in exhaustive 243-quintic family | 162 |
+| Integer companion determinants and first-four-field traces | 162/162 |
+| Independent **held-out** F243 and F729 counts | **324/324** |
+| Mod-`3` field arithmetic | Exact |
+| Classical Riemann hypothesis proof | **Not claimed** |
+
+For instance, Host8-selected quintic code `91` has `(A,B)=(1,1)` and independently validated new counts `#C(F_243)=200`, `#C(F_729)=719`.
+
+Reproduce:
+
+```bash
+python verify_frobenius_companion.py
+```
+
+The generated [results/frobenius_companion_predictions.csv](results/frobenius_companion_predictions.csv) is checked against its committed counterpart by GitHub Actions.
+
+### What this does and does not establish
+
+A companion matrix built from known point counts packages the genus-two zeta polynomial into a finite-dimensional operator. It is **not** an independently constructed Frobenius action on a curve's Jacobian or étale cohomology, so it cannot alone establish a new operator–zeta equivalence. Its successful higher-extension predictions demonstrate nontrivial arithmetic self-consistency with independent counts, governed by the existing finite-field Weil theory.
+
+**Seed versus tail:** In the 194 smooth Host8 samples, 109 distinct five-trit seeds appear; 57 seeds occur more than once, and every such repeated-seed group has different `X1` values but invariant `(A,B)`. This shows the full spectral coordinate varies while the zeta pair is unchanged. Because `(A,B)` is by design a deterministic function of the five-trit seed, the conditional independence `(A,B) ⟂ tail | seed` is automatic. It does **not** prove unconditional statistical independence between seed and tail. In these 194 records all 194 full `X1` values are distinct, so naive in-sample mutual-information estimates are severely overfit; describing the tail as uniformly random or irrelevant to *every* possible curve-specific operator requires a properly controlled statistical test.
+
+The next noncircular step is to construct the characteristic polynomial **directly from a geometric Frobenius operation**, without using `A`, `B`, or the first point counts as inputs, and then independently compare its characteristic polynomial with the known zeta numerator.
