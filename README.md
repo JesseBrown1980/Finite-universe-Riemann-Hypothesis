@@ -256,3 +256,15 @@ python verify_mod9_teich_character.py --host8-dir "D:\\ASOLARIA-HOST8-ROOMS-300G
 The script reads **only the first 884,736 bytes** of each of sectors `000,187,374`, checks six pinned hashes and all 288 room seeds, and does **not** scan the entire 300 GB array. Generated tables: [all smooth-curve mod-9 controls](results/teich_mod9_curve_controls.csv) and [Host8 common-input mod-9 controls](results/host8_teich_mod9_controls.csv). GitHub Actions requires both to reproduce exactly.
 
 **Next mathematical milestone (not yet completed):** implement an actual Monsky-Washnitzer Frobenius lift of `x -> x^3` and the corresponding `y` lift, reduce the lifted differential forms in the four-dimensional degree-one p-adic cohomology, obtain `det(I - T*Frob) mod 9`, and compare with these independent baselines. See [Kedlaya's original algorithm](https://arxiv.org/abs/math/0105031) and [integral-basis considerations](https://arxiv.org/abs/0809.1243).
+
+
+## Host8 375-sector sweep and Phase 5B mod-9 Frobenius construction
+
+See [HOST8_375_SECTOR_SCAN_AND_PHASE5B.md](HOST8_375_SECTOR_SCAN_AND_PHASE5B.md) for the full sampling protocol, reported figures, and mathematical derivation.
+
+- [375-sector read-only scanner](scan_host8_375_sectors.py): validates sector sizes, the six pinned SHA-256 anchors, and 96+96 room locations in each of 375 sectors. It can optionally hash all 300 GB with `--hash-entire-volume`, but that requires the actual Windows drive.
+- [Windows-reported summary](results/host8_375sectors_scan_summary.csv): **72,000 sample reads representing 71,625 unique room locations**; 48,252 reported smooth quintics (35,609 ordinary, 7,285 p-rank one, 5,358 p-rank zero). The file explicitly marks those aggregates *operator-reported, not independently replayed*.
+- [Formal `Z/9Z` Frobenius lift](verify_formal_frobenius_lift_mod9.py): `Phi(x)=x^3`, `Phi(y)=y^3 + (f(x^3)-f(x)^3)/(2*y^3)` modulo 9. Its curve relation passes for all 162 smooth curves and all 194 smooth selected Host8 occurrences, verified by [regression tests](test_formal_frobenius_mod9.py).
+- [Exact formal-lift curve dataset](results/formal_frobenius_mod9_curve_checks.csv) and [Host8 selected dataset](results/host8_formal_frobenius_mod9_checks.csv).
+
+**Important status:** The mod-9 lift is an exact *ring* endomorphism, not yet the 4×4 Monsky–Washnitzer *cohomology* matrix. High-pole differential reduction with small-characteristic precision handling remains necessary. The physical 300 GB sector files were not mounted in this environment; GitHub Actions uses only the pinned three published sample slices. The fluid calibration's reported speed of sound is computed from `sqrt(P/rho)` rather than a separately fitted acoustic dispersion.
