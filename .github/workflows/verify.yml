@@ -30,6 +30,8 @@ jobs:
         run: python verify_ternary_spectral_controls.py --host8-dir /tmp/asolaria-host8 --output-dir /tmp/asolaria-recomputed
       - name: Build exact 4x4 Frobenius companion matrices and independently count F243 / F729 points
         run: python verify_frobenius_companion.py --host8-dir /tmp/asolaria-host8 --output /tmp/asolaria-recomputed/frobenius_companion_predictions.csv --host8-output /tmp/asolaria-recomputed/host8_frobenius_companion_results.csv
+      - name: Independently verify genus-two stable p-ranks and nilpotent Hasse-Witt examples
+        run: python -m unittest -v test_geometric_p_rank.py
       - name: Verify direct geometric Cartier-Manin / Hasse-Witt operator on H^0(C, Omega^1)
         run: python verify_geometric_hasse_witt.py --host8-dir /tmp/asolaria-host8 --output /tmp/asolaria-recomputed/host8_geometric_hasse_witt_results.csv
       - name: Compare recorded tables semantically

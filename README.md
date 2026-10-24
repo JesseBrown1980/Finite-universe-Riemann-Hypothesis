@@ -201,8 +201,10 @@ $$\det(I - T C_{\text{HW}}) = 1 - \operatorname{Tr}(C_{\text{HW}}) T + \det(C_{\
 | **Exhaustive 162 smooth curves: $\operatorname{Tr}(C_{\text{HW}}) \equiv -A \pmod 3$** | **162 / 162 Exact Match** |
 | **Exhaustive 162 smooth curves: $\det(C_{\text{HW}}) \equiv B \pmod 3$** | **162 / 162 Exact Match** |
 | **Host8 194 smooth curves: geometric operator matches mod 3** | **194 / 194 Exact Match** |
-| **Host8 Jacobian $p$-ranks** | **133 ordinary (rank 2), 61 rank-1, 0 supersingular** |
+| **Host8 Jacobian $p$-ranks** | **133 ordinary ($p$-rank 2), 35 $p$-rank 1, 26 supersingular ($p$-rank 0)** |
 | **Point counts or prior zeta inputs used in construction** | **None (first-principles differential geometry)** |
+**Stable-rank clarification (verified against all 162 smooth quintics and 194 Host8 smooth observations):** The rank of the single Cartier-Manin matrix measures the Jacobian's $a$-number ($a=2-\\operatorname{rank}(C_{\\text{HW}})$), not generally its $p$-rank. For genus two over $\\mathbb{F}_3$, the latter equals $\\operatorname{rank}(C_{\\text{HW}}^2)$. The 26 sampled rank-one *nilpotent* matrices satisfy $C_{\\text{HW}}^2=0$ and have $p$-rank 0 (supersingular, but not superspecial). The new CSV records both matrix rank and $a$-number separately. Exhaustive 162-curve distribution: $p$-rank 2: 120, rank 1: 24, rank 0: 18. Reference: [Camacho-Navarro, Ph.D. dissertation (2019), §2.2.2, equation (2.2.5)](https://api.mountainscholar.org/server/api/core/bitstreams/82a41a38-35b3-495b-a9d8-f4179ed7c10b/content).
+
 
 Reproduce:
 ```bash

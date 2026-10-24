@@ -35,17 +35,30 @@ def hasse_witt_matrix(a1: int, a2: int, a4: int) -> tuple[tuple[int, int], tuple
     return ((a2 % 3, 1), (a1 % 3, a4 % 3))
 
 
+def rank_2x2_mod3(m: tuple[tuple[int, int], tuple[int, int]]) -> int:
+    """Exact F_3 rank, applicable also to nilpotent matrices."""
+    (a, b), (c, d) = m
+    if (a * d - b * c) % 3:
+        return 2
+    return int(any(x % 3 for row in m for x in row))
+
+
 def hasse_witt_invariants(a1: int, a2: int, a4: int) -> tuple[int, int, int]:
-    """Compute (trace mod 3, det mod 3, p-rank) of C_HW."""
-    tr = (a2 + a4) % 3
-    det = (a2 * a4 - a1) % 3
-    # Rank over F_3
-    if det != 0:
-        p_rank = 2  # ordinary curve
-    elif any(x % 3 != 0 for x in (a2, 1, a1, a4)):
-        p_rank = 1  # 1-rank
-    else:
-        p_rank = 0  # superspecial / supersingular
+    """Return (trace, determinant, *stable* Jacobian p-rank), over F_3.
+
+    For genus g=2, p-rank = rank(H * H^(3)); because coefficients lie in
+    F_3, H^(3)=H entrywise, hence p-rank = rank(H^2). Matrix rank itself
+    controls the a-number and is NOT generally equal to p-rank.
+    """
+    a, b, c, d = a2 % 3, 1, a1 % 3, a4 % 3
+    m = ((a, b), (c, d))
+    square = (
+        ((a * a + b * c) % 3, (a * b + b * d) % 3),
+        ((c * a + d * c) % 3, (c * b + d * d) % 3),
+    )
+    tr, det = (a + d) % 3, (a * d - b * c) % 3
+    p_rank = rank_2x2_mod3(square)
+    assert p_rank <= rank_2x2_mod3(m)
     return (tr, det, p_rank)
 
 
@@ -107,6 +120,8 @@ def main():
             B = int(cr['P2'])
             tr, det, p_rk = hasse_witt_invariants(a1, a2, a4)
             p_ranks[p_rk] += 1
+            matrix_rank = rank_2x2_mod3(hasse_witt_matrix(a1, a2, a4))
+            a_number = 2 - matrix_rank
             exp_tr = (-A) % 3
             exp_det = B % 3
             match = int(tr == exp_tr and det == exp_det)
@@ -119,6 +134,7 @@ def main():
                 'a0': a0, 'a1': a1, 'a2': a2, 'a3': a3, 'a4': a4,
                 'P1': A, 'P2': B,
                 'HW_trace': tr, 'HW_det': det, 'p_rank': p_rk,
+                'HW_matrix_rank': matrix_rank, 'a_number': a_number,
                 'expected_tr_mod3': exp_tr, 'expected_det_mod3': exp_det,
                 'geometric_match': match
             })
@@ -129,12 +145,14 @@ def main():
                 'a0': a0, 'a1': a1, 'a2': a2, 'a3': a3, 'a4': a4,
                 'P1': '', 'P2': '',
                 'HW_trace': '', 'HW_det': '', 'p_rank': '',
+                'HW_matrix_rank': '', 'a_number': '',
                 'expected_tr_mod3': '', 'expected_det_mod3': '',
                 'geometric_match': 0
             })
 
     assert smooth_host8 == 194
     assert hw_matches == 194
+    assert p_ranks == {0: 26, 1: 35, 2: 133}, p_ranks
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open('w', newline='') as f:
@@ -143,7 +161,7 @@ def main():
         writer.writerows(host8_rows)
 
     print(f"PASS: 194/194 Host8 smooth curves match Cartier-Manin operator invariants mod 3")
-    print(f"      Host8 Jacobian p-ranks: ordinary (rank 2) = {p_ranks[2]}, 1-rank = {p_ranks[1]}, supersingular = {p_ranks[0]}")
+    print(f"      Host8 Jacobian stable p-ranks: ordinary (p=2) = {p_ranks[2]}, p=1 = {p_ranks[1]}, supersingular (p=0) = {p_ranks[0]}")
     print(f"Exported geometric operator results to {args.output}")
 
 
