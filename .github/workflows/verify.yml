@@ -1,0 +1,35 @@
+name: Verify ternary finite-field RH analogue
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  exact-finite-field-verification:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Exhaustive characteristic-three arithmetic and brute-force checks
+        run: python -m unittest -v test_finite_ternary_weil.py
+      - name: Recompute all 243 curves and 288 Host8-derived samples
+        run: python host8_ternary_weil.py --output-dir /tmp/asolaria-recomputed
+      - name: Compare recorded tables semantically
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          for name in ('all_quintics.csv', 'host8_curve_results.csv'):
+              with Path('results',name).open(newline='') as f:
+                  original=list(csv.DictReader(f))
+              with Path('/tmp/asolaria-recomputed',name).open(newline='') as f:
+                  reproduced=list(csv.DictReader(f))
+              assert original==reproduced, name
+              print('PASS',name,len(original),'rows')
+          PY
