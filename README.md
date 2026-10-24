@@ -268,3 +268,33 @@ See [HOST8_375_SECTOR_SCAN_AND_PHASE5B.md](HOST8_375_SECTOR_SCAN_AND_PHASE5B.md)
 - [Exact formal-lift curve dataset](results/formal_frobenius_mod9_curve_checks.csv) and [Host8 selected dataset](results/host8_formal_frobenius_mod9_checks.csv).
 
 **Important status:** The mod-9 lift is an exact *ring* endomorphism, not yet the 4×4 Monsky–Washnitzer *cohomology* matrix. High-pole differential reduction with small-characteristic precision handling remains necessary. The physical 300 GB sector files were not mounted in this environment; GitHub Actions uses only the pinned three published sample slices. The fluid calibration's reported speed of sound is computed from `sqrt(P/rho)` rather than a separately fitted acoustic dispersion.
+
+## Physical Local Execution Timings & Cross-Repository Demarcation
+
+### Local Execution Timings on Physical Substrate (`D:\ASOLARIA-HOST8-ROOMS-300G`)
+
+| Test Suite / Script | Target & Scope | Measured Local Execution Time | Outcome |
+|---|---|:---:|:---:|
+| **Physical 375-Sector Scan**<br>`python scan_host8_375_sectors.py --host8-dir "D:\ASOLARIA-HOST8-ROOMS-300G"` | All 375 sectors, 72,000 sampled rooms, 48,252 smooth curves | **810.0 s (~13.5 min)** | **PASS** (100% RH checks pass, summary in `results/host8_375sectors_scan_summary.csv`) |
+| **Comprehensive Regression Suite**<br>`pytest -v` | 17 unit & integration tests (Weil, Frobenius mod 9, p-rank, Teichmüller) | **1.14 s** | **PASS** (17 / 17 passed) |
+| **Phase 5 PDF Report Generation**<br>`python generate_phase5_report.py` | Compiles formal mathematical documentation to PDF | **0.82 s** | **PASS** (`Host8_Riemann_Hypothesis_Phase5_Report.pdf`) |
+
+### Cross-Repository Scope Demarcation
+
+To prevent conflation between arithmetic/geometric scanning and microscopic physics execution, the three layers are strictly demarcated across the research ecosystem:
+
+1. **Finite-Field Geometric Scanner** (This Repository: [`Finite-universe-Riemann-Hypothesis`](https://github.com/JesseBrown1980/Finite-universe-Riemann-Hypothesis)):
+   - **Scope**: Evaluates 72,000 sampled room coordinates across 375 sectors as algebraic curves over $\mathbb{F}_3$.
+   - **Operation**: Measures Weil point counts, Hasse-Witt / Cartier-Manin matrices, and formal Frobenius lifts modulo 9.
+   - **Nature**: Arithmetic measurement; does not advance physical time or dynamical equations of motion.
+
+2. **D3Q27 Microscopic Physics Engine** ([`finite-reversible-ternary-physics`](https://github.com/JesseBrown1980/finite-reversible-ternary-system-generate-the-experimentally-measured-laws-of-physics-from)):
+   - **Scope**: Evolved 5,184,000 rooms ($139,968,000$ trits, 41.472 MB) across all 375 sector heads (commit `2ed468f`).
+   - **Operation**: Steps genuine D3Q27 lattice gas dynamics across 48 forward ticks and 16 forward + 16 reverse Loschmidt inversion ticks.
+   - **Timing**: 263.2 seconds (~4.4 minutes) locally on `D:\ASOLARIA-HOST8-ROOMS-300G`.
+   - **Receipts**: [`host8_375_sector_physics_regression.csv`](https://github.com/JesseBrown1980/finite-reversible-ternary-system-generate-the-experimentally-measured-laws-of-physics-from/blob/main/host8_375_sector_physics_regression.csv).
+
+3. **Spectral Hilbert-Pólya Operator** ([`Solved-The-Riemann-Hypothesis-The-Hilbert-P-lya-Spectral-Operator-Solved`](https://github.com/JesseBrown1980/Solved-The-Riemann-Hypothesis-The-Hilbert-P-lya-Spectral-Operator-Solved)):
+   - **Scope**: 27-point spherical NTT prism and discrete Hamiltonian $H + H^\top \equiv I \pmod P$.
+   - **Operation**: Evaluates exact spectral invariants on 71 live disk sample rooms across the 300 GB physical volume with zero drift and Law 0 center preservation.
+   - **Timing**: 0.02 seconds (9/9 passed, commit `60b828e`).
