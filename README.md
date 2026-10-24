@@ -69,3 +69,41 @@ With the Windows physical directory, set `--host8-dir D:\\ASOLARIA-HOST8-ROOMS-3
 This verifies a known theorem in a reproducible ternary computational setting. The finite-field function-field analogue is mathematically different from the classical Riemann zeta function, whose Riemann hypothesis remains open. There is not yet a justified bridge between the Host8 finite-state dynamics and the zeros of classical `zeta(s)`.
 
 References: [Weil's theorem for curves](https://math.richardgriffon.me/CFF/ln/LecNotes_05.pdf); [Clay Riemann Hypothesis](https://www.claymath.org/millennium/Riemann-Hypothesis/).
+
+
+## Phase 2: controlled 27-mode spectral comparison on identical Host8 room inputs
+
+See [SPECTRAL_VS_FINITE_FIELD_REVIEW.md](SPECTRAL_VS_FINITE_FIELD_REVIEW.md) and the original 27-mode [spectral operator](https://github.com/JesseBrown1980/Solved-The-Riemann-Hypothesis-The-Hilbert-P-lya-Spectral-Operator-Solved).
+
+The new `verify_ternary_spectral_controls.py` evaluates five *specified deterministic* coupling ladders and writes `results/spectral_falsification_controls.csv`:
+
+| Coupling ladder | Tr(T²) mod P | Tr(T⁴) mod P | Exact pairing and Law 0 |
+|---|---:|---:|---|
+| Original 27 primes | 885145 | 987346 | PASS |
+| Reversed prime sequence | 669202 | 51179 | PASS |
+| Deterministic LCG random weights (seed 20261024) | 365735 | 17869 | PASS |
+| All ones | 1458 | 62801 | PASS |
+| Original 13 participating weights; other 14 set to one | 885145 | 987346 | PASS |
+
+**Sensitivity finding:** The generator's formula uses `PRIMES_27[d]` only for `1 <= d <= 13`. The entries `d=0` and `d=14..26` do **not** influence this operator at all. Changing those 14 weights leaves every one of its 27 eigenvalues exactly unchanged. The DC-zero, odd-trace vanishing, and modular eigenvalue-pairing identities are generic properties of skew-circulant matrices, not specific evidence for classical Riemann zeta.
+
+Using the same 288 authenticated Host8 room selections as Phase 1, the new experiment extracts balanced ternary room digits, computes all 27 finite-field modal projections `X_k`, and verifies
+
+```
+Y_k = prism(Tv)[k] = mu[(-k) mod 27] * X_k   (mod 1,000,081)
+Y_0 = 0
+```
+
+for **288 × 27 = 7,776** exact modular identities. The sign change in the spectral index arises because `prism(v)[k]` uses the positive Fourier exponent, while the generator's eigenvectors are `W^(k*i)`.
+
+The resulting `results/host8_spectral_common_inputs.csv` includes the same room IDs, the genus-two curve coefficients `(P1,P2)`, and selected spectral projections. Putting two data products on the same input does not itself prove a zeta–spectral correspondence.
+
+### Reproduction including actual published Host8 slices
+
+```bash
+python verify_ternary_spectral_controls.py --host8-dir /path/to/host8_samples
+```
+
+The [GitHub Actions workflow](.github/workflows/verify.yml) fetches the three immutable 884,736-byte slices from the exact pinned physics commit, verifies all six block SHA-256 hashes, reruns both Phase 1 and Phase 2, and checks **all four** generated CSV datasets against the committed reference results.
+
+**Physical scope:** Only three documented sector prefixes, not all 300 GB, are part of this public end-to-end reproduction. The 300 GB Windows disk and any local full-drive verification are outside this hosted runner. The finite-field RH analogue is known from Weil's theorem; the classical Riemann hypothesis remains an open problem.
