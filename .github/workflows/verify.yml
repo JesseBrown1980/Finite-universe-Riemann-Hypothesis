@@ -26,12 +26,14 @@ jobs:
           curl -fsSL --retry 3 "https://raw.githubusercontent.com/JesseBrown1980/finite-reversible-ternary-physics/5a7e9a23dcacdea6fac3c5fa9d5db3069e82e9e3/data/host8_samples/sector-374.rooms" -o "/tmp/asolaria-host8/sector-374.rooms"
       - name: Authenticate Host8 hashes and recompute all curves
         run: python host8_ternary_weil.py --host8-dir /tmp/asolaria-host8 --output-dir /tmp/asolaria-recomputed
+      - name: Exact modular falsification controls and authenticated Host8 spectral diagonalization
+        run: python verify_ternary_spectral_controls.py --host8-dir /tmp/asolaria-host8 --output-dir /tmp/asolaria-recomputed
       - name: Compare recorded tables semantically
         run: |
           python - <<'PY'
           import csv
           from pathlib import Path
-          for name in ('all_quintics.csv', 'host8_curve_results.csv'):
+          for name in ('all_quintics.csv', 'host8_curve_results.csv', 'spectral_falsification_controls.csv', 'host8_spectral_common_inputs.csv'):
               with Path('results',name).open(newline='') as f:
                   original=list(csv.DictReader(f))
               with Path('/tmp/asolaria-recomputed',name).open(newline='') as f:
