@@ -212,3 +212,47 @@ python verify_geometric_hasse_witt.py
 # With authenticated Host8 slices or physical Windows 300 GB directory:
 python verify_geometric_hasse_witt.py --host8-dir "D:\ASOLARIA-HOST8-ROOMS-300G"
 ```
+
+
+## Phase 5A: exact mod-9 Teichmueller character-sum control
+
+The new [verify_mod9_teich_character.py](verify_mod9_teich_character.py) computes mod-9 trace residues from the *coefficients* of each genus-two curve `C:y^2=f(x)` over `F_3`, without using the previously published zeta coefficients as construction inputs. This is a **baseline** for testing a future geometric 3-adic Frobenius lift, **not** a completed Monsky-Washnitzer cohomology algorithm.
+
+For the quadratic character `chi` on `F_3`, the Teichmueller lift `tau(r) = r^3 (mod 9)` sends the residues `0,1,2` to `0,1,8`. Using `F_9 = F_3[u]/(u^2+1)`, the exact coefficient calculations are:
+
+```
+A mod 9 = sum_{x in F3} tau(f(x))
+S2 mod 9 = sum_{x in F9} tau(f(x)^4)
+B mod 9 = (A^2 + S2)/2  (mod 9)
+```
+
+(The quotient field value `f(x)^4` is always `0,+1,-1` in `F_3`. The integer `2^-1 mod 9` is `5`.) Signed character sums also recover exact integer `A`, `B`, and are compared against the existing point-count derived records only **after** construction.
+
+| Measurement | Result |
+|---|---:|
+| Smooth quintics with exact coefficient-derived `A`, `B` | **162 / 162** |
+| Host8-selected smooth curves with matching `A`, `B` | **194 / 194** |
+| Naive entrywise mod-9 lift of the Cartier-Manin trace | **60 / 162** correct |
+| Naive entrywise mod-9 lift of the determinant | **47 / 162** correct |
+| Authenticated physical **samples** used by GitHub CI | 3 sector prefixes, 6 SHA-256 checks |
+
+This exposes a concrete lifting obstruction: reducing the Cartier-Manin matrix mod 3 is valid, but regarding those same coefficients as a mod-9 Frobenius matrix is generally **wrong**. A genuine Monsky-Washnitzer/Kedlaya computation must construct the lifted Frobenius action and reduce it on an appropriate cohomological basis, tracking denominators and p-adic precision.
+
+**Precision distinction:** The general Weil bound for a genus-two curve over `F_3` is `|A| <= 4*sqrt(3) < 7`. For the specific odd-degree quintic model `y^2=f(x)`, there are just 3 finite x-values, so the stronger `|A|<=3` follows directly; hence `A mod 9` uniquely determines `A` here. But published `B` values span `[-2,7]`, and `B=-2` and `B=7` coincide mod 9. Recovering `B` uniquely requires additional information or precision.
+
+Reproduce with published samples:
+
+```bash
+python -m unittest -v test_mod9_teich_character.py
+python verify_mod9_teich_character.py --host8-dir /path/to/host8_samples
+```
+
+On the Host8 Windows machine:
+
+```powershell
+python verify_mod9_teich_character.py --host8-dir "D:\\ASOLARIA-HOST8-ROOMS-300G"
+```
+
+The script reads **only the first 884,736 bytes** of each of sectors `000,187,374`, checks six pinned hashes and all 288 room seeds, and does **not** scan the entire 300 GB array. Generated tables: [all smooth-curve mod-9 controls](results/teich_mod9_curve_controls.csv) and [Host8 common-input mod-9 controls](results/host8_teich_mod9_controls.csv). GitHub Actions requires both to reproduce exactly.
+
+**Next mathematical milestone (not yet completed):** implement an actual Monsky-Washnitzer Frobenius lift of `x -> x^3` and the corresponding `y` lift, reduce the lifted differential forms in the four-dimensional degree-one p-adic cohomology, obtain `det(I - T*Frob) mod 9`, and compare with these independent baselines. See [Kedlaya's original algorithm](https://arxiv.org/abs/math/0105031) and [integral-basis considerations](https://arxiv.org/abs/0809.1243).
