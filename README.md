@@ -81,7 +81,7 @@ The new `verify_ternary_spectral_controls.py` evaluates five *specified determin
 |---|---:|---:|---|
 | Original 27 primes | 885145 | 987346 | PASS |
 | Reversed prime sequence | 669202 | 51179 | PASS |
-| Deterministic LCG random weights (seed 20261024) | 365735 | 17869 | PASS |
+| Deterministic LCG random weights (seed 20261024) | 987855 | 103269 | PASS |
 | All ones | 1458 | 62801 | PASS |
 | Original 13 participating weights; other 14 set to one | 885145 | 987346 | PASS |
 
