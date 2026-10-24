@@ -1,0 +1,39 @@
+name: Verify bounded finite Frobenius mod9 candidate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  finite-frobenius-mod9:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independently compare finite geometric matrices against counted zeta tables
+        run: python -m unittest -v test_finite_frobenius_mod9.py
+      - name: Generate bounded 4x4 matrices without point-count inputs
+        run: python verify_finite_frobenius_mod9.py --output-dir "$RUNNER_TEMP/phase5c"
+      - name: Check generated outputs
+        run: |
+          python - <<'PY'
+          import csv
+          import os
+          from pathlib import Path
+          base=Path(os.environ["RUNNER_TEMP"])/"phase5c"
+          with (base/"finite_frobenius_mod9_162.csv").open(newline="") as f:
+              curves=list(csv.DictReader(f))
+          with (base/"host8_finite_frobenius_mod9_288.csv").open(newline="") as f:
+              host8=list(csv.DictReader(f))
+          assert len(curves)==162
+          assert len(host8)==288
+          assert sum(int(r["smooth_genus2"]) for r in host8)==194
+          print("PASS: 162 finite matrices, 288 manifest records, 194 smooth entries")
+          print("NOTE: bounded finite approximation; infinite-tail proof pending")
+          PY
