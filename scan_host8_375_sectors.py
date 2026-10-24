@@ -124,13 +124,17 @@ def scan(directory: Path, ids: tuple[int,...], size: int, canonical: int, deep: 
     combined=totals['canonical']+totals['deep']
     assert combined['rooms']==len(ids)*2*samples
     assert combined['smooth']==sum(combined['p_rank_'+str(i)] for i in range(3))
+    distinct_offsets=len(set(sample_offsets(canonical,samples)) |
+                         set(sample_offsets(deep,samples)))
     summary.append(dict(grid='combined',**{key:combined.get(key,0) for key in
                         ('rooms','smooth','rh_pass','p_rank_2','p_rank_1','p_rank_0')}))
     metadata=dict(generated_utc=datetime.now(timezone.utc).isoformat(),
                   provenance='live_read_only_from_specified_files',
                   mode='full_byte_hash_plus_sampling' if hash_entire_volume else 'distributed_room_sampling_and_file_size',
                   sectors=len(ids),sector_bytes=size,physical_bytes_verified_by_stat=len(ids)*size,
-                  sampled_room_reads=combined['rooms'],sampled_bytes_read=combined['rooms']*8,
+                  sampled_room_reads=combined['rooms'],
+                  unique_sampled_room_positions=len(ids)*distinct_offsets,
+                  sampled_bytes_read=combined['rooms']*8,
                   full_volume_bytes_hashed=len(ids)*size if hash_entire_volume else 0,
                   anchor_prefix_sha256_checked=int(require_anchor),
                   elapsed_seconds=round(time.monotonic()-start,3))
